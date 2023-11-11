@@ -1,13 +1,26 @@
 package guru.springframework.spring6webapp.domain;
 
+import jakarta.persistence.*;
+
 import java.util.Set;
 
 //POJO (Plain Old Java Objects)
+@Entity
 public class Author {
-    //Instance variables
+
+    //Defines id as the primary key
+    //Database is responsible for auto-generating (incrementing) the primary key (id)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    //Defines a many-to-many relationship with books mapped by authors
+    @ManyToMany(mappedBy = "authors")
+    private Set<Book> books;
+
+    //Instance Variables
     private String firstName;
     private String lastName;
-    private Set<Book> books;
 
     //Constructors
     public Author(String firstName, String lastName, Set<Book> books) {
@@ -15,7 +28,8 @@ public class Author {
         this.lastName = lastName;
         this.books = books;
     }
-    //JPA requires an empty constructor
+
+    //Java Persistence API requires an empty constructor
     public Author() {
     }
 
@@ -42,5 +56,13 @@ public class Author {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

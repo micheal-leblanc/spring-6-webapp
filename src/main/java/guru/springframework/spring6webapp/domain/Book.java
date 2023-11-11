@@ -1,13 +1,35 @@
 package guru.springframework.spring6webapp.domain;
 
+import jakarta.persistence.*;
+
 import java.util.Set;
 
 //POJO (Plain Old Java Objects)
+
+@Entity
 public class Book {
+    //Defines id as the primary key
+    //Database is responsible for auto-generating (incrementing) the primary key (id)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    //Defines a many-to-many relationship
+    //author_book table holds the relationship between records in the author and book table
+    //@JoinTable configures the properties of the table
+        //joinColumns: One or more @JoinColumn annotations, specifying foreign key column
+        //mappings to the table of the owning side
+        //inverseJoinColumns: One or more @JoinColumn annotations, specifying foreign key
+        //column mappings to the table of the unowned side
+        //@JoinColumn: Map an association to a foreign key column
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors;
+
     //Instance Variables
     private String title;
     private String isbn;
-    private Set<Author> authors;
 
     //Constructors
     public Book(String title, String isbn, Set<Author> authors) {
@@ -15,7 +37,8 @@ public class Book {
         this.isbn = isbn;
         this.authors = authors;
     }
-    //JPA requires an empty constructor
+
+    //Java Persistence API requires an empty constructor
     public Book() {
     }
 
@@ -42,5 +65,13 @@ public class Book {
 
     public void setAuthors(Set<Author> authors) {
         this.authors = authors;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
