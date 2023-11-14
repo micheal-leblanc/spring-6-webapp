@@ -2,6 +2,7 @@ package guru.springframework.spring6webapp.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.Set;
 
 //POJO (Plain Old Java Objects)
@@ -73,5 +74,30 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    //This checks that id is unique and not null
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    //Provides useful information about the object
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", authors=" + authors +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                '}';
     }
 }
